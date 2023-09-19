@@ -1,17 +1,29 @@
 # test get_child_boards - separate test file
 import numpy as np
+import copy
 
 def getChildren(board, char):
     ''' numpy version '''
     if not char in ['X', 'O']:
         raise ValueError("get_child_boards: expecting char='X' or 'O' ")
 
-    newval = -1
-    if char == 'X': newval = 1
+    x_or_o = -1
+    if char == 'X': x_or_o = 1
 
     child_list = []
 
-    # add your code here
+    # find all the spots where 0s exist (empty spots), and fill with
+    # char
+    print(f'Starting Board:\n{board}')
+    possible_board = np.array
+    print(f'Possible Child Boards:\n')
+    for row_idx, row in enumerate(board):
+        for column_idx, element in enumerate(row):
+            if element == 0:
+                possible_board = copy.deepcopy(board)
+                possible_board[row_idx][column_idx] = x_or_o
+                print(f'{possible_board}\n')
+                child_list.append(possible_board)
 
     return child_list
 
