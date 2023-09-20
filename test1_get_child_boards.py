@@ -2,20 +2,21 @@
 import numpy as np
 import copy
 
-def getChildren(board, char):
+
+def get_children(board, char):
     ''' numpy version '''
     if not char in ['X', 'O']:
         raise ValueError("get_child_boards: expecting char='X' or 'O' ")
 
     x_or_o = -1
-    if char == 'X': x_or_o = 1
+    if char == 'X':
+        x_or_o = 1
 
     child_list = []
 
     # find all the spots where 0s exist (empty spots), and fill with
     # char
     print(f'Starting Board:\n{board}')
-    possible_board = np.array
     print(f'Possible Child Boards:\n')
     for row_idx, row in enumerate(board):
         for column_idx, element in enumerate(row):
@@ -27,19 +28,21 @@ def getChildren(board, char):
 
     return child_list
 
+
 def run_tests():
     b = np.array([[1, 0, -1], [1, 0, 0], [-1, 0, 0]])
 
-    #TEST1 length of child list
+    # TEST1 length of child list
     expect = b.size - np.count_nonzero(b)
-    child_list = getChildren(b, 'X')
+    child_list = get_children(b, 'X')
 
     if len(child_list) == expect:
-        print (f"PASS Test 1")
-    else: print (f"FAIL Test 1: \
+        print(f"PASS Test 1")
+    else:
+        print(f"FAIL Test 1: \
         expect: {expect} actual: {len(child_list)}")
 
-    #TEST2 - is expected board in list
+    # TEST2 - is expected board in list
     b2 = np.array([[1, 1, -1], [1, 0, 0], [-1, 0, 0]])
     found = False
     for board in child_list:
@@ -48,18 +51,23 @@ def run_tests():
             break
 
     if found:
-        print ("PASS Test 2")
-    else: print (f"FAIL Test 2: Expected board not in child list")
+        print("PASS Test 2")
+    else:
+        print(f"FAIL Test 2: Expected board not in child list")
 
-    #TEST3 Test 4x4 array
-    b3 = np.array([ [0,0,0,0], [0,0,0,0],[0,0,0,0],[0,0,0,0] ])
-    expect = b.size - np.count_nonzero(b)
-    child_list = getChildren(b, 'X')
+    # TEST3 Test 4x4 array
+    b3 = np.array([[0, 0, 0, 0],
+                   [0, 0, 0, 0],
+                   [0, 0, 0, 0],
+                   [0, 0, 0, 0]])
+    expect = b3.size - np.count_nonzero(b3)
+    child_list = get_children(b3, 'X')
 
     if len(child_list) == expect:
         print(f"PASS Test 3  4x4 array")
     else:
         print(f"FAIL Test 3 4x4 array: \
             expect: {expect} actual: {len(child_list)}")
+
 
 run_tests()
