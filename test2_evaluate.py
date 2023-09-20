@@ -35,12 +35,12 @@ def evaluate(board):
     diag_sums.append(np.sum(down_diag))
     diag_sums.append(np.sum(up_diag))
     if (row_dim == col_dim):
-        if(((abs(np.sum(down_diag))) == row_dim) or
-                ((abs(np.sum(up_diag))) == row_dim)):
-            if(((np.sum(up_diag) < 0)) or (np.sum(down_diag)) < 0):
-                win = -1
-            else:
-                win = 1
+       for entries in diag_sums:
+           if (abs(entries) == row_dim):
+               if (entries < 1):
+                   win = -1
+               else:
+                   win = 1
 
     print(f'Our Board:\n{board}')
     print(f'Row Sums: {row_sums}')
