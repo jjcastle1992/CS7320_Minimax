@@ -48,7 +48,7 @@ def evaluate(board):
                 else:
                     win = 1
 
-    print(f'Our Board:\n{board}')
+    print(f'\nOur Board:\n{board}')
     print(f'Row Sums: {row_sums}')
     print(f'Col Sums: {col_sums}')
     print(f'Down Diag {down_diag}')
