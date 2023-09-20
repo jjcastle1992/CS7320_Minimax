@@ -1,10 +1,16 @@
 import numpy as np
 
+
 def evaluate(board):
-    '''returns 1 for X win, -1 for O win, 0 for tie OR game in progress
+    '''
     Using numpy functions to add values in rows and cols
     If we get a sum equal to size of row,col,diag (plus or minus)
      we have a winner
+    :param board: a 2d numpy array (should be a square N x N matrix)
+    :return: int representing the game win state:
+        1 for X win,
+        -1 for O win,
+        0 for tie OR game in progress
     '''
     win = 0
     row_dim, col_dim = board.shape
@@ -22,11 +28,10 @@ def evaluate(board):
     col_sums = np.sum(board, axis=0)
     for cols in col_sums:
         if abs(cols) == col_dim:
-            win = 1
             if (cols < 0):
-                wins = -1
+                win = -1
             else:
-                wins = 1
+                win = 1
 
     # check for diag win
     diag_sums = []
@@ -34,13 +39,14 @@ def evaluate(board):
     up_diag = np.diag(np.fliplr(board))
     diag_sums.append(np.sum(down_diag))
     diag_sums.append(np.sum(up_diag))
+
     if (row_dim == col_dim):
-       for entries in diag_sums:
-           if (abs(entries) == row_dim):
-               if (entries < 1):
-                   win = -1
-               else:
-                   win = 1
+        for entries in diag_sums:
+            if (abs(entries) == row_dim):
+                if (entries < 1):
+                    win = -1
+                else:
+                    win = 1
 
     print(f'Our Board:\n{board}')
     print(f'Row Sums: {row_sums}')
@@ -55,66 +61,71 @@ def evaluate(board):
 def run_tests():
     b = np.array([[1, 0, -1], [1, 0, 0], [-1, 0, 0]])
 
-    #TEST1 : No winner
+    # TEST1 : No winner
     b = np.array([[1, 0, -1], [1, 0, 0], [-1, 0, 0]])
     score = evaluate(b)
     expect = 0
 
     if score == expect:
-        print (f"PASS Test 1 No Win")
-    else: print (f"FAIL Test 1 No Win: \
+        print(f"PASS Test 1 No Win")
+    else:
+        print(f"FAIL Test 1 No Win: \
         expect: {expect} actual: {score}")
 
-    #TEST 2: Win for X
+    # TEST 2: Win for X
     b = np.array([[1, 0, -1], [1, 0, 0], [1, 0, -1]])
     score = evaluate(b)
     expect = 1
 
     if score == expect:
-        print (f"PASS Test 2  column win")
-    else: print (f"FAIL Test 2: column win \
+        print(f"PASS Test 2  column win")
+    else:
+        print(f"FAIL Test 2: column win \
         expect: {expect} actual: {score}")
 
-    #TEST3 Win for O
+    # TEST3 Win for O
     b = np.array([[-1, -1, -1], [1, 0, 1], [1, 0, 1]])
     score = evaluate(b)
     expect = -1
 
     if score == expect:
-        print (f"PASS Test 3  row win")
-    else: print (f"FAIL Test 3: row win \
+        print(f"PASS Test 3  row win")
+    else:
+        print(f"FAIL Test 3: row win \
         expect: {expect} actual: {score}")
 
-
-    #TEST4 Win for X on diagonal
+    # TEST4 Win for X on diagonal
     b = np.array([[-1, -1, 1], [1, 1, 1], [1, 0, -1]])
     score = evaluate(b)
     expect = 1
 
     if score == expect:
-        print (f"PASS Test 4  diag win")
-    else: print (f"FAIL Test 4: diag win \
+        print(f"PASS Test 4  diag win")
+    else:
+        print(f"FAIL Test 4: diag win \
         expect: {expect} actual: {score}")
 
-    #TEST5 win for O on reverse diagonal
+    # TEST5 win for O on reverse diagonal
     b = np.array([[-1, 1, 1], [1, -1, -1], [1, 0, -1]])
     score = evaluate(b)
     expect = -1
 
     if score == expect:
-        print (f"PASS Test 5  diag2 win")
-    else: print (f"FAIL Test 5: diag2 win \
+        print(f"PASS Test 5  diag2 win")
+    else:
+        print(f"FAIL Test 5: diag2 win \
         expect: {expect} actual: {score}")
 
-    #TEST6 win for O on reverse diagonal for 4x4 board
+    # TEST6 win for O on reverse diagonal for 4x4 board
     b = np.array([[-1, 1, 1, 0], [1, -1, -1, 0], \
-                  [1, 0, -1, 0], [1,0,0,-1]])
+                  [1, 0, -1, 0], [1, 0, 0, -1]])
     score = evaluate(b)
     expect = -1
 
     if score == expect:
-        print (f"PASS Test 6  diag2 win 4x4")
-    else: print (f"FAIL Test 6: diag2 win 4x4 \
+        print(f"PASS Test 6  diag2 win 4x4")
+    else:
+        print(f"FAIL Test 6: diag2 win 4x4 \
         expect: {expect} actual: {score}")
 
 
