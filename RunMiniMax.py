@@ -3,9 +3,9 @@
 import math
 import numpy as np
 import time
-
-from copy import copy
+import copy
 COUNT = 0    # use the COUNT variable to track number of boards explored
+
 
 def showBoard(board):
     # displays rows of board
@@ -41,17 +41,118 @@ def get_board_one_line(board):
     return bstr
 
 def evaluate(board):
-    # replace with your code
-    pass
+    """
+    Using numpy functions to add values in rows and cols
+    If we get a sum equal to size of row,col,diag (plus or minus)
+     we have a winner
+    :param board: a 2d numpy array (should be a square N x N matrix)
+    :return: int representing the game win state:
+        1 for X win,
+        -1 for O win,
+        0 for tie OR game in progress
+    """
+    win = 0
+    row_dim, col_dim = board.shape
+
+    # check for row win
+    row_sums = np.sum(board, axis=1)
+    for rows in row_sums:
+        if abs(rows) == row_dim:
+            if (rows < 0):
+                win = -1
+            else:
+                win = 1
+
+    # check for column win
+    col_sums = np.sum(board, axis=0)
+    for cols in col_sums:
+        if abs(cols) == col_dim:
+            if (cols < 0):
+                win = -1
+            else:
+                win = 1
+
+    # check for diag win
+    diag_sums = []
+    down_diag = np.diag(board, k=0)
+    up_diag = np.diag(np.fliplr(board))
+    diag_sums.append(np.sum(down_diag))
+    diag_sums.append(np.sum(up_diag))
+
+    if (row_dim == col_dim):
+        for entries in diag_sums:
+            if (abs(entries) == row_dim):
+                if (entries < 1):
+                    win = -1
+                else:
+                    win = 1
+
+    # print(f'\nOur Board:\n{board}')
+    # print(f'Row Sums: {row_sums}')
+    # print(f'Col Sums: {col_sums}')
+    # print(f'Down Diag {down_diag}')
+    # print(f'Up Diag {up_diag}')
+
+    return win
 
 def is_terminal_node(board):
-    # replace with your code
-    pass
+    """Evaluates board to determine if a win or terminal state has been
+    reached.
+    :param board: a 2d numpy array (should be a square N x N matrix)
+    :return: Bool where True means either:
+        1. A Win state has been achieved (X/O win)
+        2. A tie has been reached (due to a terminal board config being
+        reached)
+    """
+
+    terminal_board = False
+    row_dim, col_dim = np.shape(board)
+    max_moves = row_dim * col_dim
+
+    # Call Evaluate to determine if a win state has been reached
+    game_state = evaluate(board)
+
+    if ((game_state == -1) or (game_state == 1)):
+        terminal_board = True
+
+    # if not, then check number of remaining moves (0s on board)
+    moves_made = np.count_nonzero(board)
+    if(moves_made >= max_moves):
+        terminal_board = True
+
+    return terminal_board
 
 
 def get_child_boards(board, char):
-    # replace with your code
-    pass
+    """Gets all children for a possible board.
+    :param board: a 2d numpy array (should be a square N x N matrix)
+    :param char: a char representing X or O to define which player the
+    board should be generated for.
+    :return: a list 2d numpy arrays of all the possible child boards
+    """
+
+    if not char in ['X', 'O']:
+        raise ValueError("get_child_boards: expecting char='X' or 'O' ")
+
+    x_or_o = -1
+    if char == 'X':
+        x_or_o = 1
+
+    child_list = []
+
+    # find all the spots where 0s exist (empty spots), and fill with
+    # char
+    print(f'Starting Board:\n{board}')
+    print(f'Possible Child Boards:\n')
+    for row_idx, row in enumerate(board):
+        for column_idx, element in enumerate(row):
+            if element == 0:
+                possible_board = copy.deepcopy(board)
+                possible_board[row_idx][column_idx] = x_or_o
+                print(f'{possible_board}\n')
+                child_list.append(possible_board)
+
+    return child_list
 
 
 def minimax(board, depth, maximizingPlayer):
