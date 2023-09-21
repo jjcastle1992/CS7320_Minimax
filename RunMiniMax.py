@@ -7,7 +7,7 @@ import copy
 COUNT = 0    # use the COUNT variable to track number of boards explored
 
 
-def showBoard(board):
+def show_board(board):
     # displays rows of board
     strings = ["" for i in range(board.shape[0])]
     idx = 0
@@ -181,6 +181,35 @@ def minimax(board, depth, maximizingPlayer):
             minEva = min(minEva, eva)
         return minEva
 
+def run_minimax(board_name, board):
+    """
+    Function designed to call minimax
+    :param board_name: a string for the start board name to be tested
+    :param board: a 2d numpy array (should be a square N x N matrix)
+    """
+
+    print(f'\nRunning Test for Board {board_name}')
+    print(f"--------\nStart Board: \n{board}")
+
+    # set max_depth  to the number of blanks (zeros) in the board
+    max_depth = np.count_nonzero(board == 0)  # counts moves left (# 0s)
+    print(f"Running minimax w/ max depth {max_depth} for:")
+    show_board(board)
+
+    if(np.sum(board) > 0):
+        is_x_to_move = False
+    else:
+        is_x_to_move = True
+
+    # read time before and after call to minimax for b1
+    tic = time.perf_counter()
+    score = minimax(board, max_depth, is_x_to_move)
+    toc = time.perf_counter()
+    print('TESTING Board b1')
+    print(f"score : {score}")
+    print(f'Total boards explored: {boards_explored}')
+    print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
+
 def run_code_tests():
     '''
     b1 : expect win for X (1)  < 200 boards explored
@@ -208,20 +237,18 @@ def run_code_tests():
     b3 = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
     b4 = np.array(
         [[1, 0, 0, 0], [0, 1, 0, -1], [0, -1, 1, 0], [0, 0, 0, -1]])
-    print(f"\n--------\nStart Board: \n{b1}")
+    test_cases = {'b1': b1, 'b2': b2, 'b3': b3, 'b4': b4}
 
-    # set max_depth  to the number of blanks (zeros) in the board
-    max_depth = 5   # adjust this for each board
-    is_x_to_move = True
 
-    # read time before and after call to minimax for b1
-    tic = time.perf_counter()
-    score = minimax(b1, max_depth, is_x_to_move)
-    toc = time.perf_counter()
-    print('TESTING Board b1')
-    print(f"score : {score}")
-    print(f'Total boards explored: {boards_explored}')
-    print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
+    chosen_test_case = 1  # change this to correspond with 1 for test b1
+    counter = 0
+    for key, value in test_cases.items():
+        counter += 1
+        if counter == chosen_test_case:
+            test_name = key
+            test_board = value
+
+    run_minimax(test_name, test_board)
 
     # read time before and after call to minimax for b2
     # tic = time.perf_counter()
