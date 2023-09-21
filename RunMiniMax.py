@@ -51,8 +51,6 @@ def evaluate(board):
         -1 for O win,
         0 for tie OR game in progress
     """
-    global boards_explored
-    boards_explored += 1
     win = 0
     row_dim, col_dim = board.shape
 
@@ -106,7 +104,8 @@ def is_terminal_node(board):
         2. A tie has been reached (due to a terminal board config being
         reached)
     """
-
+    global boards_explored
+    boards_explored += 1
     terminal_board = False
     row_dim, col_dim = np.shape(board)
     max_moves = row_dim * col_dim
