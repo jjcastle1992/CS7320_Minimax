@@ -4,12 +4,12 @@ import copy
 
 
 def get_children(board, char):
-    '''Gets all children for a possible board.
+    """Gets all children for a possible board.
     :param board: a 2d numpy array (should be a square N x N matrix)
     :param char: a char representing X or O to define which player the
     board should be generated for.
     :return: a list 2d numpy arrays of all the possible child boards
-    '''
+    """
 
     if not char in ['X', 'O']:
         raise ValueError("get_child_boards: expecting char='X' or 'O' ")

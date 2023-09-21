@@ -5,7 +5,7 @@ import numpy as np
 
 
 def evaluate(board):
-    '''
+    """
     Using numpy functions to add values in rows and cols
     If we get a sum equal to size of row,col,diag (plus or minus)
      we have a winner
@@ -14,7 +14,7 @@ def evaluate(board):
         1 for X win,
         -1 for O win,
         0 for tie OR game in progress
-    '''
+    """
     win = 0
     row_dim, col_dim = board.shape
 
