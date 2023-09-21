@@ -205,7 +205,7 @@ def run_minimax(board_name, board):
     tic = time.perf_counter()
     score = minimax(board, max_depth, is_x_to_move)
     toc = time.perf_counter()
-    print('TESTING Board b1')
+    print(f'TESTING Board {board_name}')
     print(f"score : {score}")
     print(f'Total boards explored: {boards_explored}')
     print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
@@ -240,7 +240,7 @@ def run_code_tests():
     test_cases = {'b1': b1, 'b2': b2, 'b3': b3, 'b4': b4}
 
 
-    chosen_test_case = 1  # change this to correspond with 1 for test b1
+    chosen_test_case = 4  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
