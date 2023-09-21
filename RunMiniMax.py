@@ -121,6 +121,10 @@ def is_terminal_node(board):
     if(moves_made >= max_moves):
         terminal_board = True
 
+    if(terminal_board):
+        print(f'FINAL BOARD CHOSEN:')
+        print(board)
+
     return terminal_board
 
 
@@ -167,6 +171,7 @@ def minimax(board, depth, maximizingPlayer):
 
     if maximizingPlayer:  # max player plays X
         maxEva = -math.inf
+        print('For X Turn')
         child_list = get_child_boards(board, 'X')
         for child_board in child_list:
             eva = minimax(child_board, depth-1, False)
@@ -175,6 +180,7 @@ def minimax(board, depth, maximizingPlayer):
 
     else:             # minimizing player
         minEva = math.inf
+        print('For O Turn')
         child_list = get_child_boards(board, 'O')
         for child_board in child_list:
             eva = minimax(child_board, depth - 1, True)
@@ -237,10 +243,27 @@ def run_code_tests():
     b3 = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
     b4 = np.array(
         [[1, 0, 0, 0], [0, 1, 0, -1], [0, -1, 1, 0], [0, 0, 0, -1]])
-    test_cases = {'b1': b1, 'b2': b2, 'b3': b3, 'b4': b4}
 
+    # custom test cases to validate minimax
+    # nearly complete X win (should come back 1)
+    j0 = np.array([[-1, -1, 1],
+                   [-1, -1, 1],
+                   [1, 0, 0]])
+    # nearly complete O win (should come back -1)
+    j1 = np.array([[-1, 0, -1],
+                   [-1, 1, 1],
+                   [0, 1, 1]])
+    # pre-determined draw state (should come back 0)
+    j2 = np.array([[1, -1, 1],
+                   [-1, 1, 1],
+                   [-1, 1, -1]])
 
-    chosen_test_case = 4  # change this to correspond with 1 for test b1
+    test_cases = {'b1': b1, 'b2': b2, 'b3': b3, 'b4': b4, 'j0': j0,
+                  'j1': j1, 'j2': j2}
+
+    # tests 1 - 4 are Dr C provided
+    # tests 5 - 7 are James C tests to validate minimax
+    chosen_test_case = 5  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
