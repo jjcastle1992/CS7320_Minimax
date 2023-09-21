@@ -184,8 +184,13 @@ def minimax_ab(board, depth, alpha, beta, maximizingPlayer):
         print('For X Turn')
         child_list = get_child_boards(board, 'X')
         for child_board in child_list:
-            eva = minimax_ab(child_board, depth-1, False)
+            eva = minimax_ab(child_board, depth-1, alpha, beta, False)
             maxEva = max(maxEva, eva)
+            alpha = max(alpha, maxEva)
+
+            if alpha > beta:  # max quits if Alpha > Beta
+                break
+
         return maxEva
 
     else:             # minimizing player
@@ -193,9 +198,15 @@ def minimax_ab(board, depth, alpha, beta, maximizingPlayer):
         print('For O Turn')
         child_list = get_child_boards(board, 'O')
         for child_board in child_list:
-            eva = minimax_ab(child_board, depth - 1, True)
+            eva = minimax_ab(child_board, depth - 1, alpha, beta,  True)
             minEva = min(minEva, eva)
+            beta = min(beta, minEva)
+            
+            if beta <= alpha:  # min quits when Beta <= Alpha
+                break
+
         return minEva
+
 
 def run_minimax_ab(board_name, board):
     """
