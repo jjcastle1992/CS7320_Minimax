@@ -27,6 +27,7 @@ def show_board(board):
     for s in strings:
         print(s)
 
+
 def get_board_one_line(board):
     # returns one line rep of a board
     import math
@@ -39,6 +40,7 @@ def get_board_one_line(board):
         if (idx + 1) % (stop) == 0:
             bstr += '|'
     return bstr
+
 
 def evaluate(board):
     """
@@ -87,13 +89,8 @@ def evaluate(board):
                 else:
                     win = 1
 
-    # print(f'\nOur Board:\n{board}')
-    # print(f'Row Sums: {row_sums}')
-    # print(f'Col Sums: {col_sums}')
-    # print(f'Down Diag {down_diag}')
-    # print(f'Up Diag {up_diag}')
-
     return win
+
 
 def is_terminal_node(board):
     """Evaluates board to determine if a win or terminal state has been
@@ -160,18 +157,18 @@ def get_child_boards(board, char):
     return child_list
 
 
-def minimax_ab(board, depth, alpha, beta, maximizingPlayer):
-    '''
+def minimax_ab(board, depth, alpha, beta, maximizing_player):
+    """
        0 (draw) 1 (win for X) -1 (win for O)
        Explores all child boards for this position and returns
        the best score given that all players play optimally
        :param board: a 2d numpy array (should be a square N x N matrix)
        :param depth: int provides the current depth as # remaining moves
-       :param alpha: int
-       :param beta: int
-       :param maximizingPlayer: bool where False = O turn; True = X turn
+       :param alpha: int passed in as -Inf to use in Alpha/Beta Pruning
+       :param beta: int passed in as +Inf to use in Alpha/Beta Pruning
+       :param maximizing_player: bool -> False = O turn; True = X turn
        returns: the value of the board
-    '''
+    """
 
     global boards_explored
     if depth == 0 or is_terminal_node(board):
@@ -179,33 +176,33 @@ def minimax_ab(board, depth, alpha, beta, maximizingPlayer):
             boards_explored += 1
         return evaluate(board)
 
-    if maximizingPlayer:  # max player plays X
-        maxEva = -math.inf
+    if maximizing_player:  # max player plays X
+        max_eva = -math.inf
         print('For X Turn')
         child_list = get_child_boards(board, 'X')
         for child_board in child_list:
             eva = minimax_ab(child_board, depth-1, alpha, beta, False)
-            maxEva = max(maxEva, eva)
-            alpha = max(alpha, maxEva)
+            max_eva = max(max_eva, eva)
+            alpha = max(alpha, max_eva)
 
             if alpha > beta:  # max quits if Alpha > Beta
                 break
 
-        return maxEva
+        return max_eva
 
     else:             # minimizing player
-        minEva = math.inf
+        min_eva = math.inf
         print('For O Turn')
         child_list = get_child_boards(board, 'O')
         for child_board in child_list:
             eva = minimax_ab(child_board, depth - 1, alpha, beta,  True)
-            minEva = min(minEva, eva)
-            beta = min(beta, minEva)
-            
+            min_eva = min(min_eva, eva)
+            beta = min(beta, min_eva)
+
             if beta <= alpha:  # min quits when Beta <= Alpha
                 break
 
-        return minEva
+        return min_eva
 
 
 def run_minimax_ab(board_name, board):
@@ -241,8 +238,9 @@ def run_minimax_ab(board_name, board):
     print(f'Total boards explored: {boards_explored}')
     print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
 
+
 def run_code_tests():
-    '''
+    """
     b1 : expect win for X (1)  < 200 boards explored
     b1 = np.array([[1, 0, -1], [1, 0, 0], [-1, 0, 0]])
 
@@ -258,7 +256,7 @@ def run_code_tests():
        b4 = np.array(
         [[1, 0, 0, 0], [0, 1, 0, -1], [0, -1, 1, 0], [0, 0, 0, -1]])
 
-    '''
+    """
     global boards_explored
     boards_explored = 0
     # Minimax for a board: evaluate the board
@@ -288,7 +286,7 @@ def run_code_tests():
 
     # tests 1 - 4 are Dr C provided
     # tests 5 - 7 are James C tests to validate minimax
-    chosen_test_case = 4  # change this to correspond with 1 for test b1
+    chosen_test_case = 1  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
@@ -301,4 +299,3 @@ def run_code_tests():
 
 if __name__ == '__main__':
     run_code_tests()
-
