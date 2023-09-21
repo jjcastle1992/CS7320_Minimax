@@ -51,6 +51,8 @@ def evaluate(board):
         -1 for O win,
         0 for tie OR game in progress
     """
+    global boards_explored
+    boards_explored += 1
     win = 0
     row_dim, col_dim = board.shape
 
@@ -161,9 +163,7 @@ def minimax(board, depth, maximizingPlayer):
        Explores all child boards for this position and returns
        the best score given that all players play optimally
     '''
-    global boards_explored
     if depth == 0 or is_terminal_node(board):
-        boards_explored += 1
         return evaluate(board)
 
     if maximizingPlayer:  # max player plays X
@@ -205,22 +205,33 @@ def run_code_tests():
     # Minimax for a board: evaluate the board
     #    expect win for X (1)  < 200 boards explored
     b1 = np.array([[1, 0, -1], [1, 0, 0], [-1, 0, 0]])
+    b2 = np.array([[0, 0, 0], [1, -1, 1], [0, 0, 0]])
+    b3 = np.array([[0, 0, 0], [0, 0, 0], [0, 0, 0]])
+    b4 = np.array(
+        [[1, 0, 0, 0], [0, 1, 0, -1], [0, -1, 1, 0], [0, 0, 0, -1]])
     print(f"\n--------\nStart Board: \n{b1}")
 
     # set max_depth  to the number of blanks (zeros) in the board
     max_depth = 5   # adjust this for each board
     is_x_to_move = True
 
-    # read time before and after call to minimax
+    # read time before and after call to minimax for b1
     tic = time.perf_counter()
     score = minimax(b1, max_depth, is_x_to_move)
     toc = time.perf_counter()
-
+    print('TESTING Board b1')
     print(f"score : {score}")
     print(f'Total boards explored: {boards_explored}')
     print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
 
-
+    # read time before and after call to minimax for b2
+    # tic = time.perf_counter()
+    # score = minimax(b2, max_depth, is_x_to_move)
+    # toc = time.perf_counter()
+    # print('TESTING Board b2')
+    # print(f"score : {score}")
+    # print(f'Total boards explored: {boards_explored}')
+    # print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
 
 
 
