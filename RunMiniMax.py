@@ -166,7 +166,10 @@ def minimax(board, depth, maximizingPlayer):
        Explores all child boards for this position and returns
        the best score given that all players play optimally
     '''
+    global boards_explored
     if depth == 0 or is_terminal_node(board):
+        if(depth == 0):
+            boards_explored += 1
         return evaluate(board)
 
     if maximizingPlayer:  # max player plays X
@@ -272,19 +275,6 @@ def run_code_tests():
             test_board = value
 
     run_minimax(test_name, test_board)
-
-    # read time before and after call to minimax for b2
-    # tic = time.perf_counter()
-    # score = minimax(b2, max_depth, is_x_to_move)
-    # toc = time.perf_counter()
-    # print('TESTING Board b2')
-    # print(f"score : {score}")
-    # print(f'Total boards explored: {boards_explored}')
-    # print(f'Time to complete minimax: {toc - tic:0.04f} seconds')
-
-
-
-
 
 
 if __name__ == '__main__':
