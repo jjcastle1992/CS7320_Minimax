@@ -160,12 +160,11 @@ def get_child_boards(board, char):
 
 
 def win(board, x_or_o):
-    """ Algorithm that detects win/block states for the player and the
+    """ Algorithm that detects win states for the player and the
     opponent for the current board.
     :param board: a 2d numpy array (should be a square N x N matrix)
     :param x_or_o: char X or O
-    return wins (bool) and blocks (bool) that are detect the presence of
-    an immediate winning or blocking state.
+    return wins (bool) - immediate winning state.
     """
     wins = False
 
@@ -207,12 +206,11 @@ def win(board, x_or_o):
 
 
 def block(board, x_or_o):
-    """ Algorithm that detects win/block states for the player and the
+    """ Algorithm that detects block states for the player and the
     opponent for the current board.
     :param board: a 2d numpy array (should be a square N x N matrix)
     :param x_or_o: char X or O
-    return wins (bool) and blocks (bool) that are detect the presence of
-    an immediate winning or blocking state.
+    return blocks (bool) - immediate blocking state.
     """
     blocks = False
 
