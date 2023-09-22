@@ -4,6 +4,8 @@ import math
 import numpy as np
 import time
 import copy
+from queue import PriorityQueue
+
 COUNT = 0    # use the COUNT variable to track number of boards explored
 
 
@@ -291,43 +293,41 @@ def corner(board):
 
 
 def priority_child_list(children, player):
-    priority_list = {0: [], 1: [], 2: [], 3: [], 4: []}
+    priority_list = PriorityQueue()
     ordered_list = []
 
-    for child in children:
-        # look for wins - top priority, priortity 0
+    for count, child in enumerate(children):
+        # look for wins - top priority, priority 0
         found_win = win(child, player)
         if(found_win):
-            priority_list[0].append(child)
+            priority_list.put((0, count, child))
             continue
 
         # look for block - second priority, priority 1
         found_block = block(child, player)
         if(found_block):
-            priority_list[1].append(child)
+            priority_list.put((1, count, child))
             continue
 
         # look for center - third priority, priority 2
         found_center = center(child)
         if(found_center):
-            priority_list[2].append(child)
+            priority_list.put((2, count, child))
             continue
 
         # look for corner - fourth priority, priority 3
         found_corner = corner(child)
         if(found_corner):
-            priority_list[3].append(child)
+            priority_list.put((3, count, child))
             continue
 
         # all else - last priority, priority 4
         else:
-            priority_list[4].append(child)
+            priority_list.put((4, count, child))
 
-    for keys in priority_list:
-        if(len(priority_list[keys]) != 0):
-            for matrix in priority_list[keys]:
-                ordered_list.append(matrix)
-
+    for items in range(priority_list.qsize()):
+        priority, random, data = priority_list.get()
+        ordered_list.append(data)
     return ordered_list
 
 
@@ -462,7 +462,7 @@ def run_code_tests():
 
     # tests 1 - 4 are Dr C provided
     # tests 5 - 7 are James C tests to validate minimax
-    chosen_test_case = 3  # change this to correspond with 1 for test b1
+    chosen_test_case = 2  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
