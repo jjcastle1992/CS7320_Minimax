@@ -293,6 +293,11 @@ def corner(board):
 
 
 def priority_child_list(children, player):
+    """Defines move priority
+    :param children: a list of numpy 2d children arrays.
+    :param player: char X or O
+    returns list ordered_list
+    """
     priority_list = PriorityQueue()
     ordered_list = []
 
@@ -328,6 +333,7 @@ def priority_child_list(children, player):
     for items in range(priority_list.qsize()):
         priority, random, data = priority_list.get()
         ordered_list.append(data)
+
     return ordered_list
 
 
