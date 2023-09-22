@@ -157,180 +157,6 @@ def get_child_boards(board, char):
     return child_list
 
 
-def win(board, x_or_o):
-    """ Algorithm that detects win/block states for the player and the
-    opponent for the current board.
-    :param board: a 2d numpy array (should be a square N x N matrix)
-    :param x_or_o: char X or O
-    return wins (bool) and blocks (bool) that are detect the presence of
-    an immediate winning or blocking state.
-    """
-    wins = False
-
-    # check player
-    if(x_or_o == 'X'):
-        x_or_o = 1
-    else:
-        x_or_o = -1
-
-    # get row_sum, col_sum, and diag_sums
-    row_sums = np.sum(board, axis=1)
-    col_sums = np.sum(board, axis=0)
-
-    diag_sums = []
-    down_diag = np.diag(board, k=0)
-    up_diag = np.diag(np.fliplr(board))
-    diag_sums.append(np.sum(down_diag))
-    diag_sums.append(np.sum(up_diag))
-
-    # check for threats (2 spaces filled + empty) the player presents
-
-    for rows in row_sums:
-        if rows == (2 * x_or_o):
-            wins = True
-
-    if (wins == False):
-        for cols in col_sums:
-            if cols == (2 * x_or_o):
-                wins = True
-                break
-
-    if(wins == False):
-        for diags in diag_sums:
-            if diags == (2 * x_or_o):
-                wins = True
-                break
-
-    return wins
-
-
-def block(board, x_or_o):
-    """ Algorithm that detects win/block states for the player and the
-    opponent for the current board.
-    :param board: a 2d numpy array (should be a square N x N matrix)
-    :param x_or_o: char X or O
-    return wins (bool) and blocks (bool) that are detect the presence of
-    an immediate winning or blocking state.
-    """
-    blocks = False
-
-    # check player
-    if(x_or_o == 'X'):
-        x_or_o = 1
-    else:
-        x_or_o = -1
-
-    # get row_sum, col_sum, and diag_sums
-    row_sums = np.sum(board, axis=1)
-    col_sums = np.sum(board, axis=0)
-
-    diag_sums = []
-    down_diag = np.diag(board, k=0)
-    up_diag = np.diag(np.fliplr(board))
-    diag_sums.append(np.sum(down_diag))
-    diag_sums.append(np.sum(up_diag))
-
-    # check for threats (2 spaces filled + empty) the opponent presents
-    for rows in row_sums:
-        if rows == (-2 * x_or_o):
-            blocks = True
-            break
-
-    if(blocks == False):
-        for cols in col_sums:
-            if cols == (-2 * x_or_o):
-                blocks = True
-                break
-
-    if (blocks == False):
-        for diags in diag_sums:
-            if diags == (-2 * x_or_o):
-                blocks = True
-                break
-
-    return blocks
-
-
-def center(board):
-    """Look for center move open
-    :param board: a 2d numpy array (should be a square N x N matrix)
-    return (bool) center that determines if the board center is
-    available for play. For even grid matrix, considers bottom right of
-    4 square 'center' the center.
-    """
-    center = False
-    row_dim, col_dim = board.shape
-
-    # determine if center space is open
-    if(board[row_dim // 2][col_dim // 2] == 0):
-        center = True
-
-    return center
-
-
-def corner(board):
-    """Look for center move open
-    :param board: a 2d numpy array (should be a square N x N matrix)
-    return (bool) corner that determines if the board corners are
-    available for play.
-    """
-    corner = False
-    row_dim, col_dim = board.shape
-
-    # check for corner cases
-    if(board[0][0] == 0):  # top left
-        corner = True
-    elif(board[0][col_dim - 1] == 0):  # top right
-        corner = True
-    elif(board[row_dim - 1][0] == 0):  # bottom left
-        corner = True
-    elif(board[row_dim - 1][col_dim - 1] == 0):  # bottom right
-        corner = True
-
-    return corner
-
-
-def priority_child_list(children, player):
-    priority_list = {0: [], 1: [], 2: [], 3: [], 4: []}
-    ordered_list = []
-
-    for child in children:
-        # look for wins - top priority, priortity 0
-        found_win = win(child, player)
-        if(found_win):
-            priority_list[0].append(child)
-            continue
-
-        # look for block - second priority, priority 1
-        found_block = block(child, player)
-        if(found_block):
-            priority_list[1].append(child)
-            continue
-
-        # look for center - third priority, priority 2
-        found_center = center(child)
-        if(found_center):
-            priority_list[2].append(child)
-            continue
-
-        # look for corner - fourth priority, priority 3
-        found_corner = corner(child)
-        if(found_corner):
-            priority_list[3].append(child)
-            continue
-
-        # all else - last priority, priority 4
-        else:
-            priority_list[4].append(child)
-
-    for keys in priority_list:
-        if(len(priority_list[keys]) != 0):
-            for matrix in priority_list[keys]:
-                ordered_list.append(matrix)
-
-    return ordered_list
-
-
 def minimax_ab(board, depth, alpha, beta, maximizing_player):
     """
        0 (draw) 1 (win for X) -1 (win for O)
@@ -354,8 +180,7 @@ def minimax_ab(board, depth, alpha, beta, maximizing_player):
         max_eva = -math.inf
         print('For X Turn')
         child_list = get_child_boards(board, 'X')
-        priority_children = priority_child_list(child_list, 'X')
-        for child_board in priority_children:
+        for child_board in child_list:
             eva = minimax_ab(child_board, depth-1, alpha, beta, False)
             max_eva = max(max_eva, eva)
             alpha = max(alpha, max_eva)
@@ -369,8 +194,7 @@ def minimax_ab(board, depth, alpha, beta, maximizing_player):
         min_eva = math.inf
         print('For O Turn')
         child_list = get_child_boards(board, 'O')
-        priority_children = priority_child_list(child_list, 'O')
-        for child_board in priority_children:
+        for child_board in child_list:
             eva = minimax_ab(child_board, depth - 1, alpha, beta,  True)
             min_eva = min(min_eva, eva)
             beta = min(beta, min_eva)
@@ -462,7 +286,7 @@ def run_code_tests():
 
     # tests 1 - 4 are Dr C provided
     # tests 5 - 7 are James C tests to validate minimax
-    chosen_test_case = 2  # change this to correspond with 1 for test b1
+    chosen_test_case = 4  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
