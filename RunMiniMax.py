@@ -121,9 +121,9 @@ def is_terminal_node(board):
     if(moves_made >= max_moves):
         terminal_board = True
 
-    if(terminal_board):
-        print(f'FINAL BOARD CHOSEN:')
-        print(board)
+    # if(terminal_board):
+    #     # print(f'FINAL BOARD CHOSEN:')
+    #     # print(board)
 
     return terminal_board
 
@@ -147,14 +147,14 @@ def get_child_boards(board, char):
 
     # find all the spots where 0s exist (empty spots), and fill with
     # char
-    print(f'Starting Board:\n{board}')
-    print(f'Possible Child Boards:\n')
+    # print(f'Starting Board:\n{board}')
+    # print(f'Possible Child Boards:\n')
     for row_idx, row in enumerate(board):
         for column_idx, element in enumerate(row):
             if element == 0:
                 possible_board = copy.deepcopy(board)
                 possible_board[row_idx][column_idx] = x_or_o
-                print(f'{possible_board}\n')
+                # print(f'{possible_board}\n')
                 child_list.append(possible_board)
 
     return child_list
@@ -174,7 +174,7 @@ def minimax(board, depth, maximizingPlayer):
 
     if maximizingPlayer:  # max player plays X
         maxEva = -math.inf
-        print('For X Turn')
+        # print('For X Turn')
         child_list = get_child_boards(board, 'X')
         for child_board in child_list:
             eva = minimax(child_board, depth-1, False)
@@ -183,7 +183,7 @@ def minimax(board, depth, maximizingPlayer):
 
     else:             # minimizing player
         minEva = math.inf
-        print('For O Turn')
+        # print('For O Turn')
         child_list = get_child_boards(board, 'O')
         for child_board in child_list:
             eva = minimax(child_board, depth - 1, True)
@@ -266,7 +266,7 @@ def run_code_tests():
 
     # tests 1 - 4 are Dr C provided
     # tests 5 - 7 are James C tests to validate minimax
-    chosen_test_case = 5  # change this to correspond with 1 for test b1
+    chosen_test_case = 4  # change this to correspond with 1 for test b1
     counter = 0
     for key, value in test_cases.items():
         counter += 1
